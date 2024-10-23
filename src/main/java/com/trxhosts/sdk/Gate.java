@@ -48,11 +48,14 @@ public class Gate
     }
 
     /**
-     * @param payment com.trxhosts.sdk.Payment instance with payment params
+     * Method build encrypted URL
+     *
+     * @param payment Payment instance with payment params
+     * @param encryptKey String Encryption key
      * @return string cipher URL that you can use for redirect on payment page
      */
-    public String getPurchasePaymentPageCipherUrl(Payment payment, String secretKey) throws Exception {
-        return paymentPageUrlBuilder.getCipherUrl(payment, secretKey);
+    public String getPurchasePaymentPageCipherUrl(Payment payment, String encryptKey) throws Exception {
+        return paymentPageUrlBuilder.getCipherUrl(payment, encryptKey);
     }
 
     /**

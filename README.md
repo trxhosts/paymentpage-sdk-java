@@ -12,8 +12,12 @@ with the TrxHosts Payment Page.
 ### Get URL for payment
 
 ```java
-Gate gate = new Gate("secret");
-Payment payment = new Payment("11");
+String secretKey = "secret";
+String encryptKey = "encrypt_secret";
+String projectId = "11";
+
+Gate gate = new Gate(secretKey);
+Payment payment = new Payment(projectId);
 
 payment
     .setParam(Payment.PAYMENT_ID, "some payment id")
@@ -21,9 +25,12 @@ payment
     .setParam(Payment.PAYMENT_CURRENCY, "EUR");
 
 String paymentUrl = gate.getPurchasePaymentPageUrl(payment);
+
+// Use the `getPurchasePaymentPageCipherUrl` method to encode the payment link.
+String paymentUrl = gate.getPurchasePaymentPageCipherUrl(payment, encryptKey);
 ``` 
 
-`paymentUrl` here is the signed URL.
+`paymentUrl` here is the signed & encoded URL.
 
 ### Handle callback from TrxHosts
 
@@ -37,10 +44,10 @@ Callback callback = gate.handleCallback(callbackData);
 `data` is the JSON string received from payment system;
 
 `callback` is the Callback object describing properties received from payment system;
-`callback` implements these methods: 
+`callback` implements these methods:
 1. `callback.getPaymentStatus();`
-    Get payment status.
+   Get payment status.
 2. `callback.getPayment();`
-    Get all payment data.
+   Get all payment data.
 3. `callback.getPaymentId();`
-    Get payment ID in your system.
+   Get payment ID in your system.

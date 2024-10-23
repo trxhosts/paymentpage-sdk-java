@@ -33,16 +33,16 @@ public class Encryptor
 
     /**
      * @param paymentLink
-     * @param keyString
+     * @param encryptKey
      * @return
      * @throws Exception
      */
-    public String encrypt(String paymentLink, String keyString) throws Exception {
+    public String encrypt(String paymentLink, String encryptKey) throws Exception {
 
         IvParameterSpec ivParams = (IvParameterSpec) getIVParam();
 
         byte[] paddedKey = new byte[KEY_LENGTH_BYTE];
-        byte[] byteKey = keyString.getBytes(UTF_8);
+        byte[] byteKey = encryptKey.getBytes(UTF_8);
         System.arraycopy(byteKey, 0, paddedKey, 0, byteKey.length);
 
         SecretKeySpec key = new SecretKeySpec(paddedKey, "AES");
