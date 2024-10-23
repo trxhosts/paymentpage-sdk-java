@@ -1,5 +1,8 @@
 package com.trxhosts.sdk;
 
+import javax.crypto.NoSuchPaddingException;
+import java.security.NoSuchAlgorithmException;
+
 /**
  * Class for communicate with our
  */
@@ -19,9 +22,9 @@ public class Gate
      * com.trxhosts.sdk.Gate constructor
      * @param secret site salt
      */
-    public Gate(String secret) {
+    public Gate(String secret) throws NoSuchPaddingException, NoSuchAlgorithmException {
         signatureHandler = new SignatureHandler(secret);
-        paymentPageUrlBuilder = new PaymentPage(signatureHandler);
+        paymentPageUrlBuilder = new PaymentPage(signatureHandler, Encryptor.getInstance());
     }
 
     /**
@@ -36,12 +39,20 @@ public class Gate
     }
 
     /**
-     * Method build payment URL
+     * Method build encrypted payment URL
      * @param payment com.trxhosts.sdk.Payment instance with payment params
      * @return string URL that you can use for redirect on payment page
      */
     public String getPurchasePaymentPageUrl(Payment payment) {
         return paymentPageUrlBuilder.getUrl(payment);
+    }
+
+    /**
+     * @param payment com.trxhosts.sdk.Payment instance with payment params
+     * @return string cipher URL that you can use for redirect on payment page
+     */
+    public String getPurchasePaymentPageCipherUrl(Payment payment, String secretKey) throws Exception {
+        return paymentPageUrlBuilder.getCipherUrl(payment, secretKey);
     }
 
     /**

@@ -1,6 +1,7 @@
 package com.trxhosts.sdk;
 
 import java.io.UnsupportedEncodingException;
+import java.net.URL;
 import java.net.URLEncoder;
 import java.util.stream.Collectors;
 
@@ -25,11 +26,26 @@ public class PaymentPage
     private SignatureHandler signatureHandler;
 
     /**
+     * Encryptor handler for encode URL
+     */
+    private Encryptor encryptor;
+
+
+    /**
      * com.trxhosts.sdk.PaymentPage constructor
      * @param signHandler signature handler for generate signature
      */
     public PaymentPage(SignatureHandler signHandler) {
         signatureHandler = signHandler;
+    }
+
+    /**
+     * @param signHandler
+     * @param encryptor
+     */
+    public PaymentPage(SignatureHandler signHandler, Encryptor encryptor) {
+        signatureHandler = signHandler;
+        this.encryptor = encryptor;
     }
 
     /**
@@ -60,6 +76,28 @@ public class PaymentPage
                 .concat(query)
                 .concat(signature);
 
+    }
+
+    /**
+     * @param payment
+     * @param secretKey
+     * @return
+     * @throws Exception
+     */
+    public String getCipherUrl(Payment payment, String secretKey) throws Exception {
+        String paymentLink = getUrl(payment);
+
+        URL url = new URL(paymentLink);
+        String protocol = url.getProtocol();
+        String host = url.getHost();
+        String path = url.getPath();
+        String query = url.getQuery();
+
+        String projectId = (String) payment.getParam(Payment.PROJECT_ID);
+
+        String encryptUrl = encryptor.encrypt(path + "?" + query, secretKey);
+
+        return String.format("%s://%s/%s/%s", protocol, host, projectId, encryptUrl);
     }
 
     /**
