@@ -4,6 +4,8 @@ import com.trxhosts.sdk.ProcessException;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
+import javax.crypto.NoSuchPaddingException;
+import java.security.NoSuchAlgorithmException;
 
 import static org.junit.Assert.assertEquals;
 
@@ -12,8 +14,7 @@ public class GateTest
     private Gate gate;
 
     @Before
-    public void initTest()
-    {
+    public void initTest() throws NoSuchPaddingException, NoSuchAlgorithmException {
         gate = new Gate(TestFixtures.secret);
     }
 
@@ -34,6 +35,16 @@ public class GateTest
     {
         assertEquals(gate, gate.setBaseUrl(TestFixtures.baseUrl));
         assertEquals(TestFixtures.baseUrl.concat(TestFixtures.compareParams), gate.getPurchasePaymentPageUrl(TestFixtures.getPayment()));
+    }
+
+    @Test
+    public void getPurchasePaymentPageCipherUrlWithoutQuery() throws Exception
+    {
+        String cipherUrl = gate.getPurchasePaymentPageCipherUrl(TestFixtures.getPayment(), TestFixtures.secret);
+
+        String[] query = cipherUrl.split("\\?");
+
+        assertEquals(query.length, 1);
     }
 
     @Test

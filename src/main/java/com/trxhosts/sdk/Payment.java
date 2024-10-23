@@ -3,7 +3,6 @@ package com.trxhosts.sdk;
 import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.HashMap;
-import java.util.List;
 
 /**
  * Class for preparing payment params
@@ -116,5 +115,14 @@ public class Payment
      */
     public HashMap<String, Object> getParams() {
         return params;
+    }
+
+    /**
+     * Get paymnet param by key
+     * @param $key
+     * @return object param
+     */
+    public Object getParam(String $key) {
+        return params.get($key);
     }
 }
