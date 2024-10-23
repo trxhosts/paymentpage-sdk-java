@@ -80,11 +80,11 @@ public class PaymentPage
 
     /**
      * @param payment
-     * @param secretKey
+     * @param encryptKey
      * @return
      * @throws Exception
      */
-    public String getCipherUrl(Payment payment, String secretKey) throws Exception {
+    public String getCipherUrl(Payment payment, String encryptKey) throws Exception {
         String paymentLink = getUrl(payment);
 
         URL url = new URL(paymentLink);
@@ -95,7 +95,7 @@ public class PaymentPage
 
         String projectId = (String) payment.getParam(Payment.PROJECT_ID);
 
-        String encryptUrl = encryptor.encrypt(path + "?" + query, secretKey);
+        String encryptUrl = encryptor.encrypt(path + "?" + query, encryptKey);
 
         return String.format("%s://%s/%s/%s", protocol, host, projectId, encryptUrl);
     }
